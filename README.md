@@ -1,13 +1,13 @@
 # Data Visualization Project - Summer 2018
 
 ## Owner details
----
-### owner:
-  firstname: "Sandeep"
-  lastname: "Khandelwal"
-  community: "Data Visualization"
 
-### owner:
-  firstname: "Abhishek"
-  lastname: "Gupta"
-  community: "Data Visualization"
+### Owner:
+     firstname: "Sandeep"
+     lastname: "Khandelwal"
+     community: "Data Visualization"
+
+### Owner:
+     firstname: "Abhishek"
+     lastname: "Gupta"
+     community: "Data Visualization"
