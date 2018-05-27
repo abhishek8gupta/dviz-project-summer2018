@@ -1,0 +1,64 @@
+\documentclass[sigconf]{acmart}
+%\settopmatter{printacmref=false} % Removes citation information below abstract
+\renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
+\pagestyle{plain} % removes running headers
+
+\usepackage{booktabs} % For formal tables
+\usepackage{listings}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\begin{document}
+\title{Data analysis and visualization of Indian Premier League(IPL) matches}
+
+\author{Sandeep Khandelwal}
+\email{skhande@iu.edu}
+
+\author{Abhishek Gupta}
+\email{abhigupt@iu.edu}
+
+\begin{abstract}
+
+The Python packages have complex nature of inter-dependencies. Creating
+network structure of the package dependency can help in understanding several
+ aspects of these dependencies. For example, we can easily understand the
+ most basic packages and the packages which have complex dependencies. We can
+  also understand the nature of this network (scalefree, random graph etc)
+  and then utilize the concepts from these network structure.  Further,
+this analysis can be extended to any other programming language to understand
+the package network. The scope of this project is to focus on python based
+packages and navigate to all dependent packages to build a network graph of
+these packages and then analyze this network.
+\end{abstract}
+
+\keywords{ipl, analysis, python, packages}
+
+\maketitle
+
+\input{relatedwork}
+
+%\input{similartechnologies}
+
+%\input{conclusion}
+
+%\end{document}  % This is where a 'short' article might terminate
+
+
+\section{Acknowledgements}
+ The authors thank Prof. YY Ahn for his technical guidance. The
+ authors would also like to thank TAs of Data Visualization class for their valued
+ support. 
+
+\section{Repo} 
+ All project and report document can be found at \href{https://github.com/abhishek8gupta/dviz-project-summer2018/master/report/main.pdf}{github project}.
+
+\nocite{*}
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}
