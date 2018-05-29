@@ -24,21 +24,49 @@
 
 \begin{abstract}
 
-The Python packages have complex nature of inter-dependencies. Creating
-network structure of the package dependency can help in understanding several
- aspects of these dependencies. For example, we can easily understand the
- most basic packages and the packages which have complex dependencies. We can
-  also understand the nature of this network (scalefree, random graph etc)
-  and then utilize the concepts from these network structure.  Further,
-this analysis can be extended to any other programming language to understand
-the package network. The scope of this project is to focus on python based
-packages and navigate to all dependent packages to build a network graph of
-these packages and then analyze this network.
+This exploratory analysis will help us visualize the best players in previous
+IPL matches both bowlers and batsman. It will help use visualize best 
+teams during past matches. There will also be a breakdown on whether
+home pitch was favorable in terms of wins. It will also depict how the players 
+performed and eventually led to a match winning effort. For example if 
+a team has best players but they never performed together in a single match.
+If they all play well, it will result in a match win. Hence, these facts can be used to
+predict the winners in upcoming match. Other analysis can be done are players by
+number of run, wickets, maximum number of six's, four's etc. Man of the match
+by each season. Average runs scored by each team over by over. It may also
+have analysis on poorly performing players for each team. Poor players 
+can be based on their bowling or batting scores. 
+   
 \end{abstract}
 
-\keywords{ipl, analysis, python, packages}
+\keywords{ipl, analysis, python, packages, bowling, batting}
 
 \maketitle
+
+\section{introduction}
+We would like to analyze IPL match for last decade for all IPL matches held. This analysis
+will be done on ball by ball data from previous IPL matches. Some important visualization
+we plan to create are
+\begin {itemize}
+\item top batsman
+\item top bowlers
+\item best team by year
+\item players by max six's
+\item players by maximum fours's
+\item players by maximum man of matches
+\item hight run grossers
+\item maximum wicket takers
+\item team performance by venue 
+\end {itemize}
+
+These are key visualizations we plan to make but may not be limited to these 
+visualization and may have more added to the list above. 
+
+\section{technology}
+We plan to use python as programming language and use D3 or Plotly as charting
+library. We plan to incorporate all charts in a jupyter notebook. We may also
+use other python modules like matplotlib and pandas if needed. 
+
 
 \input{relatedwork}
 
@@ -55,7 +83,7 @@ these packages and then analyze this network.
  support. 
 
 \section{Repo} 
- All project and report document can be found at \href{https://github.com/abhishek8gupta/dviz-project-summer2018/master/report/main.pdf}{github project}.
+ All project and report document can be found at \href{https://github.com/abhishek8gupta/dviz-project-summer2018/blob/master/report/main.pdf}{github project}.
 
 \nocite{*}
 \bibliographystyle{unsrt}
