@@ -6,6 +6,7 @@
 \usepackage{booktabs} % For formal tables
 \usepackage{listings}
 \usepackage{hyperref}
+\usepackage{placeins}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -38,44 +39,453 @@ can be based on their bowling or batting scores.
    
 \end{abstract}
 
-\keywords{ipl, analysis, python, packages, bowling, batting, fielding, match strategy}
+\keywords{ipl, analysis, python, packages, bowling, batting, fielding, match strategy, T20, lbw, wickets, runs, bowled, stumped}
 
 \maketitle
 
 \section{introduction}
 We would like to analyze IPL match for last decade for all IPL matches played. This analysis
-will be done on ball by ball data avaiable from previous IPL matches. Some important visualization
-we plan to create per match season are
-\begin {itemize}
-\item Top batsman - Player who had maximum run
-\item Top bowler - Player who had maximum wicket
-\item Player by maximum man of match - Player who had maximum man of the match
-\item Winner team - Team who won the season
-\item Player by max six's - Player who made maximum six
-\item Player by maximum fours's - Player who made maximum four
-\item Top Team by match venue - Team who won maximum match per venue
-\end {itemize}
+will be done on ball by ball data available from previous IPL matches. This analysis will help 
+visualize the data as well from various dimensions of a match, tournament, location, player etc.
 
-These are key visualizations we plan to make but may not be limited to these 
-visualization and may have more added to the list above. 
+\subsection{Convincing Motivation}
+The official T20 \cite{www-iplt20} site displays data in a very rudimentary way. It doesn't
+provide good visualization of IPL data. If you visit the page for historical data it shows
+cross tab data accross various dimensions. It shows year wise data from 2008 which cuts
+across various dimensions like runs, players, wickets etc. 
 
-\section{technology}
-We plan to use python as programming language and use D3 or Plotly as charting
-library. We plan to incorporate all charts in a jupyter notebook. We may also
-use other python modules like matplotlib and pandas if needed. 
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/iplt20.png}}
+\caption{IPL T20 official webpage}
+\label{fig:iplt20}
+\end{figure}
 
-\section{data sources}
+The data for all the historical matches is very monotonous and tabular. Tabular representation
+make it hard to understand and see any type of pattern or anomaly. It also doesn't allow uses to 
+filter the data or aggregate the data for a given range of dates or select a subset of teams. For 
+example one cannot select top batsman from 3 given teams or top bowler from a subset of teams.
+The data may be sometimes helpful when there is a T20 tournament and only few teams are
+participating. Another important aspect left out is analysis based on location. As we can see from 
+available leaders it doesn't show any report based on location. This may sometimes help you
+to answer some questions like how two teams have performed in past on a given location or if 
+this venue has favored home team or if this is a good batting location or a bowling location. These
+questions really help to predict the outcome of the match. 
+Overall, it lacks
+\begin{itemize}
+\item monotonous
+\item filter support
+\item aggregation
+\item trend / pattern
+\item location
+\end{itemize}
+
+\subsection{Existing Work}
+For IPL data analysis, I explored few of the existing works to see what kind of insights
+they provide and what are the drawbacks of this data analysis in terms of visualizing this data.
+
+\subsubsection{IPL T20 Official Webpage}
+
+As described above, IPL T20\cite{www-iplt20} official website provides good insight on the 
+data for previous year's IPL tournament but fails to provide good visualization. The visualization
+provided by this web page is very monotonous and boring. For example, the following figure 
+shows very monotonous tabular data.
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/t20highscorers.png}}
+\caption{IPL T20 High Run Scorers}
+\label{fig:t20highscorers}
+\end{figure}
+
+\subsubsection{CricViz Analysis}
+CricViz analysis \cite{www-cricviz} provides visualization using line chart and tabular data.
+The line charts show match history for all IPL teams and briefly discusses for the teams
+based on their IPL history. Further provides analysis of delivery and length of the bowlers.
+These charts lack depth of analysis of the data as well as cool visualization of the data.
+
+ \begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/teamAnalysis}}
+\caption{IPL history of various teams}
+\label{fig:teamAnalysis}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/deliveryType}}
+\caption{Delivery Type Analysis}
+\label{fig:deliveryType}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/boundarySucess}}
+\caption{Analysis of IPL T20 matches}
+\label{fig:boundarySucess}
+\end{figure}
+
+\subsubsection{Data visualization hacknight: using Pandas for analyzing IPL T20 data}
+This team tries to visualize \cite{www-fifthelephant} the IPL T20 data using some kind of heat maps. 
+Again this lacks most the needed insights.
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/heatmaps}}
+\caption{Analysis of IPL T20 data using pandas}
+\label{fig:heatmaps}
+\end{figure}
+
+\subsubsection{Reflecting Against Perception: Data Analysis of IPL Batsman }
+This paper \cite{kumar2014reflecting} discusses various formulas to come up with
+a predictive model for IPL matches for example batsman impacting score, run impact
+score, strike rate impact store etc which is further used to compute the batsman rank etc. 
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/battingRNK}}
+\caption{Data Analysis of IPL Batsman}
+\label{fig:battingRNK}
+\end{figure}
+
+This analysis is completely focussed on building predictive model and also predict the batsman
+performance based on this model. Completely lacks visualization.
+
+\subsubsection{Analysis of IPL T20 matches with yorkr templates}
+This blog \cite{www-rbloggers-ipl} tries analyze IPL data and creates modules for 
+various kinds of reports like batsman cumulative strike rate, batsman dismissal etc
+But this blog fails to provide any details on visualization techniques. The blog mainly
+focuses on various methods to query the data. It also creates data frame to query the data directly.
+The methods mainly focus on batsman and bowler statistics functions. 
+These include
+\begin{itemize}
+\item Runs vs deliveries
+\item Batsman 4s and 6s
+\item Batsman dismissals
+\item Runs vs Strike rate
+\item Batsman Moving Average
+\item Batsman cumulative average
+\item Batsman cumulative strike rate
+\item Batsman runs against oppositions
+\item Batsman runs vs venue
+\item Batsman runs predict
+\item Bowler mean runs conceded
+\item Bowler Moving Average
+\item Bowler cumulative average wickets
+\item Bowler wicket plot
+\item Bowler wicket against opposition
+\item Bowler wicket at cricket grounds
+\end{itemize}
+
+These methods are close to the kind of reports and visualization
+we  should be doing for IPL T20 matches but doesn't provide details
+of any suggested visualization methods.
+
+\subsubsection{Contribution}
+As a part of this analysis of IPL data, our goal here is to provide
+more meaningful visualization to this data for example if I want to 
+see how tournament progressed in year 2009 or which venues 
+are high score venues. Map kind of visualization will be much better than showing
+just a tabular data. Or showing Gantt's chart make more sense for 
+showing tournament progress rather than showing tabular data. 
+As a part of this analysis, we have tried to look at the statistics shown during a 
+live match and created similar and more meaningful visualizations for historical data. 
+Another example could be on how to show highest run scorers? In all above
+methods, the output is demonstrated using tabular data which is good but doesn't 
+visualize the data correctly. Similar is the case of bowlers who took highest wickets. 
+For these two use cases I have used treemap which make more sense which represents
+a larger tile for the player who scored highest or took maximum wickets along with the 
+team to which he belongs and then reducing the tile size for the players who scored less
+and so on.  
+
+\section{Data and Methods}
+\subsubsection{ideas, sketches, prototypes}
+The idea here is to show two type of drill downs of the tournament, one is location based
+and second it year based. For example, if we open a map we should be able to select a location
+and further visualize the data based on location as a dimension. Also, we should be able to
+further apply additional filters like team, year etc. Another visualization dimension could be 
+year of the tournament where any visualization could be filtered based on a particular year 
+or a subset of years. These a two primary approaches to start visualizing data. Further, we 
+should be able to do analysis on match level or player level statistics. Match level statistics 
+could be like best teams or how the teams progressed during tournament. As we can see
+in figure ~\ref{fig:concept} this was the high level design of the data we wanted to visualize 
+for IPL T20 matches.
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/concept}}
+\caption{Concept and Design Layout}
+\label{fig:concept}
+\end{figure}
+
+\subsubsection{Visualization Methods selection}
+For visualizing the data as described in figure ~\ref{fig:concept} we took some ideas
+based on the charts shown during a live match. Here are some of the visualizations 
+we chose to represent this data.
+\begin{itemize}
+\item location: location is always best represented by a map view, hence we chose 
+to show the location of IPL matches on a map
+\item tournament progress: this kind of data can be represented in a tabular form 
+but doesn't become so intutive where you have to read into the details of the data.
+It can also be represented in a tree format but representing date along with team would
+make it clumsy. Hence, we chose a Gantt chart which is a perfect fit to represent 
+how tournament progressed.
+\item match progress: a live match shows the progress using a snail chart and we
+got inspired by the snail chart to show this visualization. Snail chart shows the match 
+progress using two line charts and also how wickets fell while runs being scored 
+by two teams.
+\item runs and wickets: these are two important aspects of a cricket match and we chose
+to represent these using a boxplot which will provide us details on median, min, max along
+with limits and team names for each season.
+\item top bowler and batsman: we chose to use treemap which gives a good visualization
+representing larger tile for top batsman and bowler. This will also give details of the team
+to which this player belongs to.
+\item dismissal: dismissal has different types like stumped, bowled, run out, caught,
+hit wicket, lbw etc. A pie chart can represent the numbers better how a player bowls
+and results in what kind of dismissals. Usually spin bowlers result in maximum caught
+and fast bowlers result in lbw or bowled.
+\item team performance: to choose the top team for a particular season or
+multiple seasons we chose bar chart which gives good comparison or which teams
+performed better in a tournament.
+\item batsman performance: batsman performance is represented by strike rate(especially)
+in a limited overs match like T20. For this form of cricket, we chose bar chart which gives 
+a good comparison of strike rate of various players. Its is important to note that a player
+can play for different team in different season, hence a bar chart becomes stacked chart for 
+accommodating this scenario. 
+\item runs scored: we chose to use bubble chart, since the size of bubble can clearly 
+represent the high run scorers within a tournament or across multiple tournaments. 
+\end{itemize}
+
+\section{Technology Methods}
+We used Tableau \cite{www-tableau} desktop to visualize this data. Tableau makes it easy to import different type
+of datasources and visualizing the data easily using these imported data sources. There is a slight 
+learning curve involved in understanding the tool and visualization methods. Some visualizations 
+require creating calculated measures. We created these calculated measures like
+\begin{itemize}
+\item count of 6s
+\item count of 4s
+\item wickets
+\item strike rate
+\item dismissal
+\end{itemize}
+
+\section{Data sources}
 We will be using datasources from IPL \cite{www-iplt20} official website
 and Kaggle challenge \cite{www-kragle-iplc}.
 
-\input{relatedwork}
+\section{Results}
+\subsubsection{Novelty and Insights}
+Based on design we created following visualizations
+\begin{itemize}
+\item Map View: Map view shows location of IPL matches on a world map. Map view has
+a associated dashboard which allows us to view team runs for each venue and wins by team 
+per venue.
+\item snail chart: snail chart shows match progress based on a match ID. It shows total runs on 
+y-axis and overs on x-axis with two line charts for each team. On the line chart it shows the
+wickets i.e. how players got dismissed. Line chart shows how the teams achieved their target.
+\item winners chart: its a bar chart which show which team was ranked best for a given season.
+You can select one or more years for this chart. The hover on the bar shows the rank of the team.
+\item Toss Winner: this chart shows a comparison of the number of times team won the match vs 
+number of times team won the toss. You can add a filter for a year.
+\item Top Batsman: This chart is a treemap which shows a bigger tile for the team who has the 
+top run scorer and then shows smaller tile for the other players in its team. This chart can be 
+filtered by year. It gives a good idea of top run scorers for the season and the team.
+\item Top Bowler: this chart is similar to top batsman where each tile shows the bowler
+who took maximum number of wickets as well as the team to which he plays. We can filter
+the data based on year of the tournament.
+\item Bowling Extras: The chart represents the teams who gave lot of extras to their opponent.
+This chart is a bubble chart and size of bubble represent the team which gave more number of 
+extra runs. We can select one or more years to visualize this data.
+\item Top Hitters: This chart represents the players who has big hitters in terms of 4s and 6s.
+This is important chart since it tells which batsman were the most big hitters for a given season 
+or multiple seasons. This chart is represented by a treemap.
+\item Runs Scored: This chart represents the number of runs scored in a season. It shows median,
+low, high watermarks. Also, it shows where each team lies  on the boxplot in terms of runs scored.
+\item Wickets taken: Similar to runs scored chart, it shows number of wickets taken by each team
+in the tournament. Also, it shows the median, min, max watermarks for the boxplot.
+\item Match Progress: this chart is a Gantt's chart which shows the how teams played for a given 
+season along with actual match dates. It shows when the teams played and how they reached to the
+end of the tournament.
+\item Wins By Venue: Chart shows the number of matches won by a team at a particular venue.
+The filter to this chart is location. This is a bar chart.
+\item Runs By Venue: Chart shows runs scored by each team on a particular venue. Its again a
+bubble chart and size of bubble is proportional to the number of runs scored.
+\item dismissal type: Its a pie chart and provides a distribution of type wickets taken by a bowler.
+The wicket(dismissal) can be lbw, stumped, bowled, caught, run out, caught and bowled. It shows 
+dismissal type for each bowler which indicates the bowlers strength in these areas.
+\item Strike Rate: Indicates how fast a batsman scores runs in limited overs game and how powerful
+as batsman is. This chart is bar chart and becomes stacked bar chart if a player played for multiple
+IPL teams.
+\item Man Of Match: This chart is a scatter plot with each dot on the plot indicates number of times
+a player received man of match award and which team he belongs to. We can apply a year filter 
+to this chart.
+\item Extra Runs by Bowler: Its again a bubble chart and indicates number of extra runs for each bowl
+bowled by the bowler. Each dot indicates the bowler and number of extra runs he conceeded and
+number of ball he bowled. 
+\end{itemize}
+\subsubsection{craftsmanship and details}
 
-%\input{similartechnologies}
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/dashboard}}
+\caption{Charts By Venue}
+\label{fig:dashboard}
+\end{figure}
 
-%\input{conclusion}
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/mapview}}
+\caption{Map View}
+\label{fig:mapview}
+\end{figure}
 
-%\end{document}  % This is where a 'short' article might terminate
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/snailChart}}
+\caption{Snail Chart}
+\label{fig:snailChart}
+\end{figure}
 
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/winners}}
+\caption{Winners}
+\label{fig:winners}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/tossWinners}}
+\caption{Toss Winners}
+\label{fig:tossWinners}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/topBatsman}}
+\caption{Top Batsman}
+\label{fig:topBatsman}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/topBowler}}
+\caption{Top Bowler}
+\label{fig:topBowler}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/bowlingExtra}}
+\caption{Bowling Extra}
+\label{fig:bowlingExtra}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/topHitter}}
+\caption{Top Hitter}
+\label{fig:topHitter}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/runsScored}}
+\caption{Runs Scored}
+\label{fig:runsScored}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/wicketsTaken}}
+\caption{Wickets Taken}
+\label{fig:wicketsTaken}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/matchProgress}}
+\caption{Match Progress}
+\label{fig:matchProgress}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/winsByVenue}}
+\caption{Wins By Venue}
+\label{fig:winsByVenue}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/runsByVenue}}
+\caption{Runs By Venue}
+\label{fig:runsByVenue}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/dismissalType}}
+\caption{Dismissal Types}
+\label{fig:dismissalType}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/strikeRate}}
+\caption{Strike Rate}
+\label{fig:strikeRate}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/manOfMatch}}
+\caption{Man Of the Match}
+\label{fig:manOfMatch}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/extraRunsByBowler}}
+\caption{Extra Runs By Bowler}
+\label{fig:extraRunsByBowler}
+\end{figure}
+\FloatBarrier
+\section{Discussion and Conclusion}
+We faced few challenges while doing this project like
+\begin{itemize}
+\item tooling: we spent sometime in experimenting the right tool/technology.
+We started off with a javascript based web application and hosting
+it on a webserver. It was difficult to find a public hosted webserver as 
+well as lot of learning involved in building a full fledge web application.
+We also tried to put the data in a jupyter notebook using pyplot and pandas
+but again hosting jupyter notebook was a challenge and getting user input in jupyter
+notebook is not so intutive. Further we experimented with tableau and really
+liked the tool which provides a public hosted app as well as facilitates different kind
+of visualization libraries.
+\item technology: Tableau \cite{www-tableau} was the tool we decided to go with but it involved some learning.
+We looked at online tutorials and KB articles to get familiar with the tool. Tableau is pretty
+rich in providing good collection of visualization libraries. 
+\item hosting: With a custom application there was a challenge to 
+host the application. However, tableau has a public web server
+where different users can host their application. We hosted our application on 
+\href{https://us-west-2b.online.tableau.com/#/site/summer2018dviz/views }{iplstats application}. ~\ref{fig:tableau_webserver}
+\end{itemize} 
+These visualizations for IPL data provide a different look to the data as well
+as help the user to look at various trends in data. 
+Another benefit these charts bring is aggregated view of data. With this view
+one can see charts not just for one season but more than one season by selecting multiple
+years. These charts provide good analysis of each season for various dimensions which is not covered 
+by any of the sources explored above. It also visualizes the data using different visualization techniques
+which make it more informative. This can be further extended  for providing trend analysis as well as doing 
+some predictive analysis of IPL matches.
+
+\begin{figure}[htbp]
+\centering
+\fbox{\includegraphics[width=\linewidth]{images/tableau_webserver}}
+\caption{Project Hosted On Tableau Public Webserver}
+\label{fig:tableau_webserver}
+\end{figure}
 
 \section{Acknowledgements}
  The authors thank Prof. YY Ahn for his technical guidance. The
@@ -84,6 +494,7 @@ and Kaggle challenge \cite{www-kragle-iplc}.
 
 \section{Repo} 
  All project and report document can be found at \href{https://github.com/abhishek8gupta/dviz-project-summer2018}{github project}.
+ Project is hosted on \href{https://us-west-2b.online.tableau.com/#/site/summer2018dviz/views }{iplstats application}
 
 \nocite{*}
 \bibliographystyle{unsrt}

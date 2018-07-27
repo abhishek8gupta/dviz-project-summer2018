@@ -1,5 +1,10 @@
 # Data Visualization Project - Summer 2018
 
+* Report folder contains latex report files
+* final report: report/project_report_abhigupt
+* tableau workbook: iplstats_wb.twbx
+
+
 ## Owner details
 
 ### Owner:
